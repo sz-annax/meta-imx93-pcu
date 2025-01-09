@@ -6,4 +6,3 @@ IMAGE_INSTALL:append = " alsa-plugins"
 IMAGE_INSTALL:append = " v4l-utils"
 IMAGE_INSTALL:append = " helloworld"
 IMAGE_INSTALL:append = " pjproject"
-

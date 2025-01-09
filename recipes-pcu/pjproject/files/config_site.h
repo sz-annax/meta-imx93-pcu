@@ -100,3 +100,8 @@
  * we don't want to increase it too much.
  */
 #define PJSIP_MAX_MODULE 38
+
+#define PJMEDIA_VIDEO_DEV_HAS_FFMPEG 1
+#define PJMEDIA_VIDEO_DEV_HAS_V4L2 1
+#define PJMEDIA_HAS_VIDEO 1
+
