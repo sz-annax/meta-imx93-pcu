@@ -1,11 +1,15 @@
 ## --*- bitbake -*--
 SRC_URI = "https://github.com/pjsip/pjproject/archive/refs/tags/${PV}.tar.gz"
 
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+
 DEPENDS += "alsa-lib"
 
 inherit autotools-brokensep pkgconfig
 
 LDFLAGS = "-shared"
+# LDFLAGS = "-static"
 
 do_unpack:append() {
 }
@@ -32,9 +36,3 @@ CXXFLAGS += "-Wno-deprecated"
 
 CLEANBROKEN = "1"
 
-python populate_packages:prepend () {
-    libdir = d.expand("${libdir}")
-    pnbase = d.expand("${PN}-lib%s")
-    do_split_packages(d, libdir, '^lib(.*)\.so\..*', pnbase, '${BPN} %s library',
-                      prepend=True, extra_depends = '', allow_links=True)
-}

@@ -8,3 +8,8 @@ SRC_URI[sha256sum] = "6140f7a97e318caa89c17e8d5468599671c6eed12d64a7c160dac879ba
 SRC_URI += "\
     file://install-perms.patch \
 "
+
+ALLOW_EMPTY:${PN} = "1"
+ALLOW_EMPTY:${PN}-dev = "1"
+ALLOW_EMPTY:${PN}-dbg = "1"
+ALLOW_EMPTY:${PN}-staticdev = "1"
