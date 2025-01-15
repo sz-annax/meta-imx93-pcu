@@ -10,10 +10,30 @@ do_compile() {
 }
 
 do_install() {
+    cat << EOF > ${WORKDIR}/helloworld-${PV}/helloworld.service  
+[Unit]
+Description=Hello World Service
+Wants=network.target
+
+[Service]
+Type=simple
+TimeoutSec=300
+ExecStart=/usr/bin/helloworld
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
     install -d ${D}${bindir}
+    install -d ${D}${systemd_unitdir}/system
+
     install -m 0755 helloworld ${D}${bindir}
+    install -m 0644 ${S}/helloworld.service ${D}/${systemd_unitdir}/system
 }
 
 FILES_${PN} = "${bindir}/helloworld"
 
-
+inherit systemd
+SYSTEMD_SERVICE:${PN} = "helloworld.service"
+SYSTEMD_AUTO_ENABLE = "enable"

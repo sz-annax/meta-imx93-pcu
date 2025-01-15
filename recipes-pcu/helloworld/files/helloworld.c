@@ -2,7 +2,6 @@
 
 int main()
 {
-	printf("hello world\n");
+	printf("hello world from yocto\n");
 	return 0;
 }
-
