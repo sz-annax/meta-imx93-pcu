@@ -1,3 +1,4 @@
+.vscode
 .vscode-ctags
-recipes-pcu/mypjlib/
-recipes-pcu/pmond/
+recipes-pcu/mypjlib
+recipes-pcu/pmond

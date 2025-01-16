@@ -5,6 +5,8 @@ LICENSE = "CLOSED"
 SRC_URI = "git://gitee.com/bigstep/pei-imx93.git;protocol=https;branch=master"
 SRCREV = "d0c463024177e37215f2f541c94457b1df458c05"
 
+# SRC_URI += "file://pjpei.patch"
+
 DEPENDS += "pjproject pkgconfig libgpiod qtbase qtdeclarative qtmultimedia qtnetworkauth"
 
 S = "${WORKDIR}/git"
