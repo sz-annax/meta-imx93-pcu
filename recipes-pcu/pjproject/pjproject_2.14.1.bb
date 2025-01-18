@@ -22,7 +22,10 @@ PARALLEL_MAKE = ""
 
 EXTRA_OECONF += "\
     --enable-shared \
+    --disable-speex-codec \
+    --disable-speex-aec \
 "
+
 EXTRA_AUTORECONF += "\
     -I build \
     --exclude=autoheader \
