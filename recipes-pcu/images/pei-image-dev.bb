@@ -43,7 +43,13 @@ IMAGE_INSTALL += " \
     qtmultimedia \
     qtmultimedia-plugins \
     qtmultimedia-qmlplugins \
+    v4l-utils \
+    libv4l \
     libgpiod \
+    tslib \
+    net-tools \
+    tcpdump \
+    libubootenv \
     pjproject \
     pei-imx \
 "
