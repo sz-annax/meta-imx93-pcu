@@ -45,11 +45,15 @@ IMAGE_INSTALL += " \
     qtmultimedia-qmlplugins \
     v4l-utils \
     libv4l \
+    ffmpeg \
+    libva \
     libgpiod \
     tslib \
     net-tools \
     tcpdump \
     libubootenv \
+    libubootenv-bin \
     pjproject \
     pei-imx \
+    htop \
 "
