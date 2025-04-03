@@ -56,4 +56,6 @@ IMAGE_INSTALL += " \
     pjproject \
     pei-imx \
     htop \
+    libsdl2 \
+    baresip \
 "
