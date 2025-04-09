@@ -37,6 +37,7 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 "
 
 IMAGE_INSTALL += " \
+    python3-pygobject \
     curl \
     packagegroup-qt6-imx \
     tzdata \
