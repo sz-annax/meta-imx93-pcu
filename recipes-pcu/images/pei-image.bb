@@ -14,10 +14,12 @@ IMAGE_FEATURES += " \
 CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-core-full-cmdline \
     packagegroup-fsl-tools-audio \
+    packagegroup-imx-core-tools \
     firmwared \
 "
 
 IMAGE_INSTALL += " \
+    chrony \
     coreutils \
     git \
     cmake \
@@ -27,6 +29,7 @@ IMAGE_INSTALL += " \
     python3-gpiod \
     python3-evdev \
     python3-numpy \
+    python3-dbus \
     sox \
     curl \
     evtest \
