@@ -37,9 +37,13 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 "
 
 IMAGE_INSTALL += " \
+    git \
+    python3-paho-mqtt \
     python3-pygobject \
     python3-gpiod \
     python3-evdev \
+    python3-numpy \
+    sox \
     curl \
     evtest \
     tzdata \
