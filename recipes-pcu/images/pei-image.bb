@@ -1,5 +1,6 @@
 SUMMARY = "A image for PEI development"
 LICENSE = "MIT"
+
 inherit core-image
 
 IMAGE_FEATURES += " \
@@ -14,7 +15,7 @@ IMAGE_FEATURES += " \
 CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-core-full-cmdline \
     packagegroup-fsl-tools-audio \
-    packagegroup-imx-core-tools \
+    packagegroup-pei-tools \
     firmwared \
 "
 
@@ -30,6 +31,7 @@ IMAGE_INSTALL += " \
     python3-evdev \
     python3-numpy \
     python3-dbus \
+    python3-netifaces \
     sox \
     curl \
     evtest \
