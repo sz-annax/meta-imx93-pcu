@@ -2,8 +2,11 @@ SUMMARY = "Baresip - A modular SIP User-Agent"
 HOMEPAGE = "https://github.com/baresip/baresip"
 LICENSE = "CLOSED"
 
-SRC_URI = "https://github.com/baresip/baresip/archive/refs/tags/v${PV}.tar.gz"
-SRC_URI[sha256sum] = "cdd4ee5b37e3a21b12848f1e14b7998cdb23c040e2057909b3e6725ba1799322"
+SRC_URI = "git://github.com/baresip/baresip.git;protocol=https;branch=main"
+# v3.23.0 - 2025-06-04
+SRCREV = "b153ccd22049c07551b808bb0d0ce4bfb9ba27be"
+
+S = "${WORKDIR}/git"
 
 DEPENDS = "re openssl alsa-lib pipewire libopus glib-2.0 glib-2.0-native"
 RDEPENDS:${PN} += "glib-2.0"

@@ -9,5 +9,5 @@ SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install:append() {
     install -d ${D}${sysconfdir}
-    install -m 0644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/chrony.conf
+    install -m 0644 ${WORKDIR}/sources-unpack/chrony.conf ${D}${sysconfdir}/chrony.conf
 }

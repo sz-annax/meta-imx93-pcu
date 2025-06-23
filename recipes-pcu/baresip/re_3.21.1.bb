@@ -3,8 +3,11 @@ SUMMARY = "Libre - A portable and generic library for real-time communications"
 HOMEPAGE = "https://github.com/baresip/re"
 LICENSE = "CLOSED"
 
-SRC_URI = "https://github.com/baresip/re/archive/refs/tags/v${PV}.tar.gz"
-SRC_URI[sha256sum] = "2c55baed02f2eec6d0a79ca0ea0892c5a9c91a91f510ec47a316fa16b97c4f41"
+SRC_URI = "git://github.com/baresip/re.git;protocol=https;branch=main"
+# v3.23.0 - 2025-06-04
+SRCREV = "715d11751d8021c89c7bd0944b29820d3f6afb3e"
+
+S = "${WORKDIR}/git"
 
 DEPENDS = "openssl alsa-lib zlib pipewire"
 

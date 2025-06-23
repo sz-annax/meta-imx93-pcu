@@ -38,7 +38,6 @@ IMAGE_INSTALL += " \
     tzdata \
     v4l-utils \
     libv4l \
-    ffmpeg \
     libva \
     libgpiod \
     tslib \
