@@ -51,12 +51,12 @@ index 595164c342c..042e7a6bbab 100644
  			"fi;" \
  		"fi;\0" \
  	"bsp_bootcmd=echo Running BSP bootcmd ...; " \
-+		"if test ${environment_saved} = yes; then " \
++		"if test -n ${environment_saved} && test ${environment_saved} = yes; then " \
 +			"echo Environment already saved; " \
 +		"else " \
 +			"echo Saving default environment to eMMC; " \
 +			"setenv environment_saved yes; " \
-+			"savenv; " \
++			"saveenv; " \
 +		"fi; " \
  		"mmc dev ${mmcdev}; if mmc rescan; then " \
  		   "if run loadbootscript; then " \
@@ -69,7 +69,7 @@ index 595164c342c..042e7a6bbab 100644
 -					   "run mmcboot; " \
 -				   "else run netboot; " \
 -				   "fi; " \
-+					"if test ${recovery_op} = start || || test ${recovery_pending_cnt} = 3; then " \
++					"if test ${recovery_op} = start || test ${recovery_pending_cnt} = 3; then " \
 +						"run recoveryboot; " \
 +					"else " \
 +						"if run loadimage; then " \
