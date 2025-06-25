@@ -1,7 +1,13 @@
 SUMMARY = "A image for PEI development"
 LICENSE = "MIT"
 
-inherit core-image
+inherit core-image extrausers
+
+# printf "%q" $(mkpasswd -m sha256crypt fahel)
+PASSWD = "\$5\$Hv7.3840I6SB21jN\$.xw0MzN1SbQFaKMhewg4GFMDetCHg4wBuuBxKkxNUa5"
+EXTRA_USERS_PARAMS = "\
+    usermod -p '${PASSWD}' root; \
+    "
 
 IMAGE_FEATURES += " \
     debug-tweaks \

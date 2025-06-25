@@ -1,0 +1,82 @@
+From ad2b2ca314e6df205aa9f70e7a70f2ee5676b994 Mon Sep 17 00:00:00 2001
+From: bigzhu <sudazzj@qq.com>
+Date: Tue, 24 Jun 2025 15:11:44 +0800
+Subject: [PATCH] add recovery script
+
+Upstream-Status: Pending
+
+Signed-off-by: bruce <zhengjing.zhu@wabtec.com>
+
+---
+ include/configs/imx93_evk.h | 44 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 40 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/imx93_evk.h b/include/configs/imx93_evk.h
+index 595164c342c..042e7a6bbab 100644
+--- a/include/configs/imx93_evk.h
++++ b/include/configs/imx93_evk.h
+@@ -110,6 +110,31 @@
+ 				"fi; " \
+ 			"fi;" \
+ 		"fi;\0" \
++	"recovery_op=no\0" \
++	"recovery_pending_cnt=0\0" \
++	"recovery_img_addr=0x84000000\0" \
++	"recoveryfdtfile=imx93-11x11-evk-recovery.dtb\0" \
++	"recoveryimage=recoveryImage\0" \
++	"recoveryrootfs=recovery-rootfs.img\0" \
++	"recoveryargs=setenv bootargs console=ttyLP0,115200 earlycon\0 " \
++	"loadrecoveryimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${recoveryimage}\0" \
++	"loadrecoveryfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr_r} ${recoveryfdtfile}\0" \
++	"loadrecoveryrootfs=fatload mmc ${mmcdev}:${mmcpart} ${recovery_img_addr} ${recoveryrootfs}\0" \
++	"boot_recovery_os=booti ${loadaddr} ${recovery_img_addr} ${fdt_addr_r};\0" \
++	"recoveryboot=echo Booting to RECOVERY MODE ...; " \
++		"if run loadrecoveryimage; then " \
++			"if run loadrecoveryfdt; then " \
++				"if run loadrecoveryrootfs; then " \
++					"run boot_recovery_os; " \
++				"else " \
++					"echo ERR: failed to load recovery rootfs; " \
++				"fi; " \
++			"else " \
++				"echo ERR: failed to load recovery fdt; " \
++			"fi; " \
++		"else " \
++			"echo ERR: failed to load recovery image; " \
++		"fi;\0" \
+ 	"netargs=setenv bootargs ${jh_clk} ${mcore_clk} console=${console} " \
+ 		"root=/dev/nfs " \
+ 		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" \
+@@ -140,6 +165,13 @@
+ 			"fi;" \
+ 		"fi;\0" \
+ 	"bsp_bootcmd=echo Running BSP bootcmd ...; " \
++		"if test ${environment_saved} = yes; then " \
++			"echo Environment already saved; " \
++		"else " \
++			"echo Saving default environment to eMMC; " \
++			"setenv environment_saved yes; " \
++			"savenv; " \
++		"fi; " \
+ 		"mmc dev ${mmcdev}; if mmc rescan; then " \
+ 		   "if run loadbootscript; then " \
+ 			   "run bootscript; " \
+@@ -150,10 +182,14 @@
+ 				   "else run netboot; " \
+ 				   "fi; " \
+ 			    "else " \
+-				   "if run loadimage; then " \
+-					   "run mmcboot; " \
+-				   "else run netboot; " \
+-				   "fi; " \
++					"if test ${recovery_op} = start || || test ${recovery_pending_cnt} = 3; then " \
++						"run recoveryboot; " \
++					"else " \
++						"if run loadimage; then " \
++							"run mmcboot; " \
++						"else run netboot; " \
++						"fi; " \
++					"fi; " \
+ 				"fi; " \
+ 		   "fi; " \
+ 	   "fi;"
