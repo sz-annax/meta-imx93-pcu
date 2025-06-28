@@ -9,6 +9,8 @@ EXTRA_USERS_PARAMS = "\
     usermod -p '${PASSWD}' root; \
     "
 
+IMAGE_INSTALL:remove = "spidev-test"
+
 IMAGE_FEATURES += " \
     debug-tweaks \
     tools-profile \
