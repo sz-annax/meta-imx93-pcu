@@ -11,10 +11,10 @@ LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
-UBOOT_SRC ?= "git://github.com/nxp-imx/uboot-imx.git;protocol=https"
-SRCBRANCH = "lf_v2024.04"
+UBOOT_SRC ?= "git://github.com/sz-annax/u-boot-imx-pcu.git;protocol=https"
+SRCBRANCH = "main"
 LOCALVERSION ?= "-${SRCBRANCH}"
-SRCREV = "e3219a5a73445219df605d1492687918d488055c"
+SRCREV = "9918045e0e3bc4ffd927c256ca5a746ee5d5dc56"
 
 DEPENDS += " \
     bc-native \
