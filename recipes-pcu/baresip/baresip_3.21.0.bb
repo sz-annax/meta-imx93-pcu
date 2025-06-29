@@ -14,20 +14,19 @@ S = "${WORKDIR}/git"
 DEPENDS = "re openssl alsa-lib pipewire libopus glib-2.0 glib-2.0-native"
 RDEPENDS:${PN} += "glib-2.0"
 
-inherit cmake pkgconfig
+inherit cmake pkgconfig systemd
 
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release -DCMAKE_PROGRAM_PATH=${STAGING_BINDIR_NATIVE}"
 
-inherit systemd
-
 SYSTEMD_SERVICE:${PN} = "baresip.service"
+SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install:append() {
     install -d ${D}${sysconfdir}/baresip
-    install -m 0644 ${UNPACKDIR}/baresip.conf ${D}${sysconfdir}/baresip/baresip.conf
+    install -m 0644 ${UNPACKDIR}/baresip.conf ${D}${sysconfdir}/baresip
 
     install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${UNPACKDIR}/baresip.service ${D}${systemd_unitdir}/system/baresip.service
+    install -m 0644 ${UNPACKDIR}/baresip.service ${D}${systemd_unitdir}/system
 }
 
 FILES_${PN} += "${sysconfdir}/baresip/baresip.conf"

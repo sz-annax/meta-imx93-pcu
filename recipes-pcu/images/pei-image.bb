@@ -55,4 +55,5 @@ IMAGE_INSTALL += " \
     libubootenv-bin \
     htop \
     baresip \
+    pmond \
 "
