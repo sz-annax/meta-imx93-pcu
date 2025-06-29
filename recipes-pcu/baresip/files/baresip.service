@@ -1,0 +1,12 @@
+[Unit]
+Description=Baresip SIP User-Agent
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/baresip
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
