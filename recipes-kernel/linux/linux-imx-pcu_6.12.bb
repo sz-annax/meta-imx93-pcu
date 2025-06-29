@@ -18,11 +18,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 DEPENDS += "coreutils-native"
 
 SRC_URI = "${LINUX_IMX_SRC}"
-LINUX_IMX_SRC ?= "git://github.com/nxp-imx/linux-imx.git;protocol=https;branch=${SRCBRANCH}"
-SRCBRANCH = "lf-6.12.y"
+SRC_URI[sha256sum] = "43f7e76edfbe4fad67e5390652c835fe750fc8b26ea306fb9409073f3a60df67"
+LINUX_IMX_SRC ?= "git://github.com/sz-annax/linux-imx-pcu.git;protocol=https;branch=${SRCBRANCH}"
+SRCBRANCH = "main"
 KBRANCH = "${SRCBRANCH}"
 LOCALVERSION = "-lts-next"
-SRCREV = "37d02f4dcbbe6677dc9f5fc17f386c05d6a7bd7a"
+SRCREV = "ecf637f258d43a17e2f1e71324d3bc864c171989"
 
 # PV is defined in the base in linux-imx.inc file and uses the LINUX_VERSION definition
 # required by kernel-yocto.bbclass.
