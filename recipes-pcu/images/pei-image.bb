@@ -56,4 +56,5 @@ IMAGE_INSTALL += " \
     htop \
     baresip \
     pmond \
+    pei-app \
 "

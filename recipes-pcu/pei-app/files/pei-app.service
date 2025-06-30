@@ -1,0 +1,12 @@
+[Unit]
+Description=PEI App Python Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/pei-app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
