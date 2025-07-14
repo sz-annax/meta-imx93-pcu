@@ -54,6 +54,7 @@ IMAGE_INSTALL += " \
     libubootenv \
     libubootenv-bin \
     htop \
+    i2c-tools \
     baresip \
     pmond \
     pei-app \
