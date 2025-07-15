@@ -6,15 +6,15 @@ SRC_URI = "git://github.com/baresip/baresip.git;protocol=https;branch=main \
            file://baresip.service \
            file://baresip.conf"
 
-# v3.23.0 - 2025-06-04
-SRCREV = "b153ccd22049c07551b808bb0d0ce4bfb9ba27be"
+# v3.24.0 - 2025-07-09
+SRCREV = "42286be6b221398c0523165352a37a5b26ed0af0"
 
 S = "${WORKDIR}/git"
 
-DEPENDS = "re openssl alsa-lib pipewire libopus glib-2.0 glib-2.0-native"
+DEPENDS = "re openssl alsa-lib pipewire libopus glib-2.0 glib-2.0-native python3-packaging-native"
 RDEPENDS:${PN} += "glib-2.0"
 
-inherit cmake pkgconfig systemd
+inherit cmake pkgconfig systemd python3native
 
 EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release -DCMAKE_PROGRAM_PATH=${STAGING_BINDIR_NATIVE}"
 

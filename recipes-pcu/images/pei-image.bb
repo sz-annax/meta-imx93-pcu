@@ -29,7 +29,6 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 
 IMAGE_INSTALL += " \
     chrony \
-    coreutils \
     git \
     cmake \
     vim \
