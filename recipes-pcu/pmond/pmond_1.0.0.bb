@@ -7,6 +7,8 @@ SRC_URI = "file://pmond.service \
 
 LICENSE = "CLOSED"
 
+S = "${UNPACKDIR}"
+
 do_install() {
     # /usr/bin/pmond
     install -d ${D}${bindir}
