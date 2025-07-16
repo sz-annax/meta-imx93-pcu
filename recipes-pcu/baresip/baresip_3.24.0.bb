@@ -4,7 +4,8 @@ LICENSE = "CLOSED"
 
 SRC_URI = "git://github.com/baresip/baresip.git;protocol=https;branch=main \
            file://baresip.service \
-           file://baresip.conf"
+           file://config \
+           file://accounts"
 
 # v3.24.0 - 2025-07-09
 SRCREV = "42286be6b221398c0523165352a37a5b26ed0af0"
@@ -23,10 +24,11 @@ SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install:append() {
     install -d ${D}${sysconfdir}/baresip
-    install -m 0644 ${UNPACKDIR}/baresip.conf ${D}${sysconfdir}/baresip
+    install -m 0644 ${UNPACKDIR}/config ${D}${sysconfdir}/baresip
+    install -m 0644 ${UNPACKDIR}/accounts ${D}${sysconfdir}/baresip
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${UNPACKDIR}/baresip.service ${D}${systemd_unitdir}/system
 }
 
-FILES_${PN} += "${sysconfdir}/baresip/baresip.conf"
+FILES:${PN} += "${sysconfdir}/baresip"

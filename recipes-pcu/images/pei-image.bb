@@ -55,7 +55,7 @@ IMAGE_INSTALL += " \
     htop \
     i2c-tools \
     baresip \
-    ubootenv-config \
+    application-config \
     pmond \
     pei-app \
 "
