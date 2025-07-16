@@ -1,13 +1,15 @@
 [Unit]
 Description=Baresip SIP User-Agent
-After=network.target
+After=network-online.target dbus.service
+Wants=network-online.target dbus.service
 
 [Service]
 Type=simple
+TimeoutSec=5
 ExecStart=/usr/bin/baresip -f /etc/baresip
-Restart=on-failure
-RestartSec=5s
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
 User=root
+Restart=no
 
 [Install]
 WantedBy=multi-user.target

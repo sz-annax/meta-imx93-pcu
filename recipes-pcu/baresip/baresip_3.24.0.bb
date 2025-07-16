@@ -3,6 +3,7 @@ HOMEPAGE = "https://github.com/baresip/baresip"
 LICENSE = "CLOSED"
 
 SRC_URI = "git://github.com/baresip/baresip.git;protocol=https;branch=main \
+           file://com.github.Baresip.conf \
            file://baresip.service \
            file://config \
            file://accounts"
@@ -26,6 +27,9 @@ do_install:append() {
     install -d ${D}${sysconfdir}/baresip
     install -m 0644 ${UNPACKDIR}/config ${D}${sysconfdir}/baresip
     install -m 0644 ${UNPACKDIR}/accounts ${D}${sysconfdir}/baresip
+
+    install -d ${D}${sysconfdir}/dbus-1/system.d
+    install -m 0644 ${UNPACKDIR}/com.github.Baresip.conf ${D}${sysconfdir}/dbus-1/system.d/
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${UNPACKDIR}/baresip.service ${D}${systemd_unitdir}/system
