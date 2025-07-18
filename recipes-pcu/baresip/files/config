@@ -25,9 +25,9 @@ call_accept             no
 
 # Audio
 #audio_path             /usr/share/baresip
-audio_player            alsa,default
-audio_source            alsa,default
-audio_alert             alsa,default
+audio_player            pipewire,"Echo Cancellation Sink"
+audio_source            pipewire,"Echo Cancellation Source"
+audio_alert             pipewire,"Echo Cancellation Sink"
 #ausrc_srate            48000
 #auplay_srate           48000
 #ausrc_channels         0

@@ -54,6 +54,7 @@ IMAGE_INSTALL += " \
     libubootenv-bin \
     htop \
     i2c-tools \
+    sqlite3 \
     baresip \
     application-config \
     pmond \

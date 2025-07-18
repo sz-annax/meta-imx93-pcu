@@ -5,7 +5,8 @@ Requires=baresip.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pei-app
+ExecStart=/usr/bin/pei-app.sh
+WorkingDirectory=/usr/share/pei-app
 Restart=always
 RestartSec=5
 
