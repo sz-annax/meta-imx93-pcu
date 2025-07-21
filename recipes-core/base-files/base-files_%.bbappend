@@ -20,6 +20,6 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/sources/my-echo-cancel.conf ${D}${sysconfdir}/pipewire/pipewire.conf.d
 
     install -d ${D}/boot/firmware
-    install -d ${D}/opt/parameters
-    install -d ${D}/opt/data
+    install -d ${D}/opt/param
+    install -d ${D}/opt/data/uploads
 }
