@@ -10,6 +10,10 @@ EXTRA_USERS_PARAMS = "\
     "
 
 IMAGE_INSTALL:remove = "spidev-test"
+# imx-base.inc
+# MACHINE_EXTRA_RRECOMMENDS = "kernel-modules"
+# BAD_RECOMMENDATIONS = "kernel-modules"
+# MACHINE_EXTRA_RRECOMMENDS = ""
 
 IMAGE_FEATURES += " \
     debug-tweaks \
@@ -56,7 +60,6 @@ IMAGE_INSTALL += " \
     i2c-tools \
     sqlite3 \
     baresip \
-    application-config \
     pmond \
     pei-app \
 "
