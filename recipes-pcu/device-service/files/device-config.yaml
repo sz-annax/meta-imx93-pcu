@@ -1,0 +1,10 @@
+# device service configuration
+
+# http server address
+httpAddr: ':80'
+
+# device firmware upload path
+firmwarePath: "/mnt/data/uploads"
+
+# sqlite database file
+sqliteDB: "/mnt/param/pcu_data.db"

@@ -60,6 +60,6 @@ IMAGE_INSTALL += " \
     i2c-tools \
     sqlite3 \
     baresip \
-    pmond \
+    device-service \
     pei-app \
 "
