@@ -2,12 +2,12 @@ SUMMARY = "PEI App Python Service"
 DESCRIPTION = "PEI Python application that runs as a systemd service."
 LICENSE = "CLOSED"
 
-SRC_URI = "git://gitee.com/bigstep/pei-app.git;protocol=https;branch=master \
+SRC_URI = "git://git@github.com/sz-annax/pei-app.git;protocol=ssh;branch=main \
            file://pei-app.service \
            file://pei-app.sh \
         "
 
-SRCREV = "28a69884148dfbfc0016b421e9b5b7d2baaffb20"
+SRCREV = "82acbf9ea5249e9c03b1e1fadc2ff1327edc445c"
 
 S = "${WORKDIR}/git"
 
