@@ -1,14 +1,17 @@
 [Unit]
-Description=PEI App Python Service
+Description=PEI Python Application Service
 After=network.target baresip.service
 Requires=baresip.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pei-app.sh
+ExecStart=/usr/bin/python3 /usr/share/pei-app/main.py
 WorkingDirectory=/usr/share/pei-app
 Restart=always
 RestartSec=5
+User=root
+# output will be displayed in real-time
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target

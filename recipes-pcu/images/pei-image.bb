@@ -42,6 +42,7 @@ IMAGE_INSTALL += " \
     python3-evdev \
     python3-numpy \
     python3-dbus \
+    python3-sqlite3 \
     python3-netifaces \
     sox \
     curl \

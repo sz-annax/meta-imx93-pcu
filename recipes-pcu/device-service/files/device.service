@@ -1,10 +1,11 @@
 [Unit]
-Description=PMON2 Application Management Services
-After=network.target
+Description=Device Management Services
+After=network-online.target 
+Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pmond
+ExecStart=/usr/bin/device-service
 Restart=always
 RestartSec=5s
 User=root
