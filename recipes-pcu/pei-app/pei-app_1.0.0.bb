@@ -7,7 +7,7 @@ SRC_URI = "git://git@github.com/sz-annax/pei-app.git;protocol=ssh;branch=main \
            file://pei-app.sh \
         "
 
-SRCREV = "cb058c3aa8a69c86c84b5a04040318fe71c701b9"
+SRCREV = "e541792a85cef03ad675cfd3790b9daafbb6570b"
 
 S = "${WORKDIR}/git"
 

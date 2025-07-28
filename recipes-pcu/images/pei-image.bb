@@ -44,6 +44,7 @@ IMAGE_INSTALL += " \
     python3-dbus \
     python3-sqlite3 \
     python3-netifaces \
+    python3-posix-ipc \
     sox \
     curl \
     evtest \
