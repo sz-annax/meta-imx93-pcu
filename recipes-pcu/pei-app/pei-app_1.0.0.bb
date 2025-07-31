@@ -7,11 +7,13 @@ SRC_URI = "git://git@github.com/sz-annax/pei-app.git;protocol=ssh;branch=main \
            file://pei-app.sh \
         "
 
-SRCREV = "e541792a85cef03ad675cfd3790b9daafbb6570b"
+SRCREV = "01a0eadc7524c3eb38d97d001096ccf78b23d9dd"
 
 S = "${WORKDIR}/git"
 
 do_install() {
+    rm -rf ${S}/docs ${S}/script
+
     # /usr/share/pei-app
     install -d ${D}${datadir}/pei-app
     cp -r ${S}/* ${D}${datadir}/pei-app/
