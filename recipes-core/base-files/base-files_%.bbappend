@@ -1,6 +1,13 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://colors.sh file://fstab file://fw_env.config file://my-echo-cancel.conf file://pcu_data.db"
+SRC_URI += "file://colors.sh \
+            file://fstab \
+            file://fw_env.config \
+            file://my-echo-cancel.conf \
+            file://pcu_data.db \
+            "
+
+FILESYSTEM_PERMS_TABLES:remove = " files/fs-perms-volatile-log.txt files/fs-perms-volatile-tmp.txt"
 
 do_install:append() {
     # colors.sh

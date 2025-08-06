@@ -62,6 +62,7 @@ IMAGE_INSTALL += " \
     i2c-tools \
     sqlite3 \
     net-snmp \
+    journal-mount \
     baresip \
     device-service \
     pei-app \

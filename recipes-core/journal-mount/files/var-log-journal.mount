@@ -1,0 +1,13 @@
+[Unit]
+Description=Bind mount for persistent journal storage
+Before=systemd-journald.service
+ConditionPathExists=/mnt/data/logs
+
+[Mount]
+What=/mnt/data/logs
+Where=/var/log/journal
+Type=none
+Options=bind
+
+[Install]
+WantedBy=multi-user.target
