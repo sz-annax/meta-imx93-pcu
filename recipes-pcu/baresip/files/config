@@ -5,7 +5,7 @@
 #------------------------------------------------------------------------------
 
 # SIP
-#sip_listen             0.0.0.0:5060
+sip_listen             0.0.0.0:5060
 #sip_certificate        cert.pem
 sip_cafile              /etc/ssl/certs/ca-certificates.crt
 sip_capath              /etc/ssl/certs
