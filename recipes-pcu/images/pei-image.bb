@@ -36,6 +36,7 @@ IMAGE_INSTALL += " \
     git \
     cmake \
     vim \
+    pipewire-alsa \
     python3-paho-mqtt \
     python3-pygobject \
     python3-gpiod \
@@ -45,7 +46,7 @@ IMAGE_INSTALL += " \
     python3-sqlite3 \
     python3-netifaces \
     python3-posix-ipc \
-    sox \
+    sox libmad mpg123 \
     curl \
     evtest \
     tzdata \

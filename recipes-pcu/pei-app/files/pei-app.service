@@ -1,6 +1,5 @@
 [Unit]
 Description=PEI Python Application Service
-After=network.target baresip.service
 Requires=baresip.service
 
 [Service]
