@@ -32,7 +32,6 @@ RDEPENDS:${PN} = " \
     kernel-tools-pci \
     kernel-tools-virtio \
     kernel-tools-vsock \
-    spidev-test \
     libgpiod-tools \
     linuxptp \
     memtester \

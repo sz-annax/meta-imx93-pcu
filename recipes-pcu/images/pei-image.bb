@@ -9,7 +9,6 @@ EXTRA_USERS_PARAMS = "\
     usermod -p '${PASSWD}' root; \
     "
 
-IMAGE_INSTALL:remove = "spidev-test"
 # imx-base.inc
 # MACHINE_EXTRA_RRECOMMENDS = "kernel-modules"
 # BAD_RECOMMENDATIONS = "kernel-modules"
