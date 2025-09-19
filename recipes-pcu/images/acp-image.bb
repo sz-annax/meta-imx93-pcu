@@ -65,5 +65,5 @@ IMAGE_INSTALL += " \
     journal-mount \
     baresip \
     device-service \
-    pei-app \
+    acp-app \
 "
