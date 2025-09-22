@@ -4,23 +4,18 @@ LICENSE = "CLOSED"
 
 SRC_URI = "git://git@github.com/sz-annax/acp-app.git;protocol=ssh;branch=main \
            file://acp-app.service \
-           file://acp-app.sh \
         "
-
-SRCREV = "eb3b5ba0201a8208adef586772a7d01dd623f281"
+SRCREV = "1c3349a1dd44fe3a9941ccc5687de0aa1b197394"
 
 S = "${WORKDIR}/git"
 
 do_install() {
+    # delete unnecessary files and folders
     rm -rf ${S}/docs ${S}/script
 
     # /usr/share/acp-app
     install -d ${D}${datadir}/${PN}
     cp -r ${S}/* ${D}${datadir}/${PN}/
-
-    # /usr/bin/acp-app.sh
-    install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/${PN}.sh ${D}${bindir}
 
     # systemd service
     install -d ${D}${systemd_system_unitdir}

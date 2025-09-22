@@ -1,11 +1,11 @@
 [Unit]
-Description=PEI Python Application Service
+Description=ACP Python Application Service
 Requires=baresip.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /usr/share/pei-app/main.py
-WorkingDirectory=/usr/share/pei-app
+ExecStart=/usr/bin/python3 /usr/share/acp-app/main.py
+WorkingDirectory=/usr/share/acp-app
 Restart=always
 RestartSec=5
 User=root
