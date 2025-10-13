@@ -5,7 +5,7 @@ LICENSE = "CLOSED"
 SRC_URI = "git://git@github.com/sz-annax/acp-app.git;protocol=ssh;branch=main \
            file://acp-app.service \
         "
-SRCREV = "1c3349a1dd44fe3a9941ccc5687de0aa1b197394"
+SRCREV = "3984e04714dd9e137f3673a9c86bef65837e9d8a"
 
 S = "${WORKDIR}/git"
 

@@ -26,7 +26,7 @@ IMAGE_FEATURES += " \
 CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-core-full-cmdline \
     packagegroup-fsl-tools-audio \
-    packagegroup-pei-tools \
+    packagegroup-app-tools \
     firmwared \
 "
 
@@ -45,10 +45,6 @@ IMAGE_INSTALL += " \
     python3-sqlite3 \
     python3-netifaces \
     python3-posix-ipc \
-    python3-debugpy \
-    python3-xmlrpclib-to \
-    python3-modules \
-    python3-misc \
     sox libmad mpg123 \
     curl \
     evtest \

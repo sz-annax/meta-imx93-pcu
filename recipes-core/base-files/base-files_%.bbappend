@@ -4,7 +4,6 @@ SRC_URI += "file://colors.sh \
             file://fstab \
             file://fw_env.config \
             file://my-echo-cancel.conf \
-            file://pcu_data.db \
             "
 
 FILESYSTEM_PERMS_TABLES:remove = " files/fs-perms-volatile-log.txt files/fs-perms-volatile-tmp.txt"
@@ -17,10 +16,6 @@ do_install:append() {
     # fw_env.config
     install -d ${D}${sysconfdir}
     install -m 0644 ${WORKDIR}/sources/fw_env.config ${D}${sysconfdir}
-
-    # pcu_data.db
-    install -d ${D}${sysconfdir}/pcu
-    install -m 0644 ${WORKDIR}/sources/pcu_data.db ${D}${sysconfdir}/pcu
 
     # my-echo-cancel.conf
     install -d ${D}${sysconfdir}/pipewire/pipewire.conf.d

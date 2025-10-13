@@ -7,4 +7,4 @@ httpAddr: ':80'
 firmwarePath: "/mnt/data/uploads"
 
 # sqlite database file
-sqliteDB: "/mnt/param/pcu_data.db"
+sqliteDB: "/mnt/param/app_data.db"

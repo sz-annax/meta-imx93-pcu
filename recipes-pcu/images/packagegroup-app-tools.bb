@@ -47,5 +47,9 @@ RDEPENDS:${PN} = " \
     python3-core \
     python3-datetime \
     python3-json \
+    python3-debugpy \
+    python3-xmlrpclib-to \
+    python3-modules \
+    python3-misc \
     udev-extraconf \
 "
