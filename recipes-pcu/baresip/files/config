@@ -90,13 +90,13 @@ module_path             /usr/lib/baresip/modules
 #module                 httpd.so
 
 # Audio codec Modules (in order)
-module                  opus.so
-#module                 amr.so
-#module                 g7221.so
-#module                 g722.so
-#module                 g726.so
+#module                  opus.so
+module                  amr.so
+module                  g7221.so
+module                  g722.so
+module                  g726.so
 module                  g711.so
-#module                 l16.so
+module                  l16.so
 #module                 mpa.so
 #module                 codec2.so
 
