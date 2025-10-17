@@ -1,0 +1,13 @@
+[Unit]
+Description=Persist and link machine-id to /mnt/data
+DefaultDependencies=no
+Before=systemd-journald.service
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/machine-id-persist.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
