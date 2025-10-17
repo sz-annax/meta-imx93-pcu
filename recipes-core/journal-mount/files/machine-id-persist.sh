@@ -1,9 +1,9 @@
 #!/bin/sh
-DATA_ID="/mnt/data/machine-id"
+DATA_ID="/mnt/param/machine-id"
 ETC_ID="/etc/machine-id"
 
-# Exit if /mnt/data does not exist
-[ -d /mnt/data ] || exit 0
+# Exit if /mnt/param does not exist
+[ -d /mnt/param ] || exit 0
 
 # Sync machine-id
 if [ -f "$DATA_ID" ]; then
