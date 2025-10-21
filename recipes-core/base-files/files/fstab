@@ -8,5 +8,5 @@ tmpfs           /run            tmpfs      mode=0755,nodev,nosuid,strictatime 0 
 tmpfs           /var/volatile   tmpfs      defaults                 0  0
 
 /dev/mmcblk0p1  /boot/firmware  vfat        defaults                0      2
-/dev/mmcblk0p3  /mnt/param      ext4        defaults,commit=1       0      2
-/dev/mmcblk0p4  /mnt/data       ext4        defaults,commit=1       0      2
+/dev/mmcblk0p3  /mnt/param      ext4        defaults,commit=2       0      2
+/dev/mmcblk0p4  /mnt/data       ext4        defaults,commit=2       0      2
