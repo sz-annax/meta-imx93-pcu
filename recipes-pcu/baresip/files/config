@@ -230,10 +230,10 @@ video_selfview          window # {window,pip}
 #statmode_default       off
 #menu_clean_number      no
 #sip_autoanswer_method  rfc5373 # {rfc5373,call-info,alert-info}
-#ring_aufile            ring.wav
-#hangup_aufile          none
+ring_aufile             my_call_receiver.wav
+hangup_aufile           my_hang_up.wav
 #callwaiting_aufile     callwaiting.wav
-#ringback_aufile        ringback.wav
+ringback_aufile         my_phone_calling.wav
 #notfound_aufile        notfound.wav
 #busy_aufile            busy.wav
 #error_aufile           error.wav

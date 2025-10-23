@@ -33,8 +33,7 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 IMAGE_INSTALL += " \
     chrony \
     git \
-    cmake \
-    vim \
+    cmake vim tree \
     pipewire-alsa \
     python3-paho-mqtt \
     python3-pygobject \

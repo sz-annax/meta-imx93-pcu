@@ -6,7 +6,10 @@ SRC_URI = "git://github.com/baresip/baresip.git;protocol=https;branch=main \
            file://com.github.Baresip.conf \
            file://baresip.service \
            file://config \
-           file://accounts"
+           file://accounts \
+           file://my_phone_calling.wav \
+           file://my_call_receiver.wav \
+           file://my_hang_up.wav"
 
 # v3.24.0 - 2025-07-09
 SRCREV = "42286be6b221398c0523165352a37a5b26ed0af0"
@@ -33,6 +36,11 @@ do_install:append() {
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${UNPACKDIR}/baresip.service ${D}${systemd_unitdir}/system
+
+    install -d ${D}${datadir}/${PN}
+    install -m 0644 ${UNPACKDIR}/my_phone_calling.wav ${D}${datadir}/${PN}/
+    install -m 0644 ${UNPACKDIR}/my_call_receiver.wav ${D}${datadir}/${PN}/
+    install -m 0644 ${UNPACKDIR}/my_hang_up.wav ${D}${datadir}/${PN}/
 }
 
 FILES:${PN} += "${sysconfdir}/baresip"
