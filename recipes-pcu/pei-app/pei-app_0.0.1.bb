@@ -5,6 +5,7 @@ LICENSE = "CLOSED"
 SRC_URI = "git://git@github.com/sz-annax/pei-app.git;protocol=ssh;branch=main \
            file://pei-app.service \
            file://pei-app.sh \
+           file://my-echo-cancel.conf \
         "
 
 SRCREV = "72f2788e41ec9d7ffc8c72455b9594e05e0f5fb5"
@@ -25,6 +26,10 @@ do_install() {
     # systemd service
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${UNPACKDIR}/pei-app.service ${D}${systemd_system_unitdir}/
+
+    # my-echo-cancel.conf
+    install -d ${D}${sysconfdir}/pipewire/pipewire.conf.d
+    install -m 0644 ${UNPACKDIR}/my-echo-cancel.conf ${D}${sysconfdir}/pipewire/pipewire.conf.d
 }
 
 FILES_${PN} = "${bindir}/pei-app.sh"
