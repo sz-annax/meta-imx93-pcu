@@ -1,0 +1,30 @@
+SUMMARY = "ACC Python Application Service"
+DESCRIPTION = "ACC Python application that runs as a systemd service."
+LICENSE = "CLOSED"
+
+SRC_URI = "git://git@github.com/sz-annax/acc-app.git;protocol=ssh;branch=main \
+           file://acc-app.service \
+        "
+SRCREV = "248170f6e30aeabf61f9ac57bdeea639fff10a5f"
+
+S = "${WORKDIR}/git"
+
+do_install() {
+    # delete unnecessary files and folders
+    rm -rf ${S}/docs ${S}/script
+
+    # /usr/share/acc-app
+    install -d ${D}${datadir}/${PN}
+    cp -r ${S}/* ${D}${datadir}/${PN}/
+
+    # systemd service
+    install -d ${D}${systemd_system_unitdir}
+    install -m 0644 ${UNPACKDIR}/${PN}.service ${D}${systemd_system_unitdir}/
+}
+
+FILES_${PN} = "${bindir}/${PN}.sh"
+
+inherit systemd
+
+SYSTEMD_SERVICE:${PN} = "${PN}.service"
+SYSTEMD_AUTO_ENABLE:${PN} = "enable"
