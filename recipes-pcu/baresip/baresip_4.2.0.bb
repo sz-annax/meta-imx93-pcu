@@ -11,12 +11,12 @@ SRC_URI = "git://github.com/baresip/baresip.git;protocol=https;branch=main \
            file://my_call_receiver.wav \
            file://my_hang_up.wav"
 
-# v3.24.0 - 2025-07-09
-SRCREV = "42286be6b221398c0523165352a37a5b26ed0af0"
+# v4.2.0 - 2025-11-04
+SRCREV = "53930df1d52cd1ce5bf5ca5751a6fcc5c5d603ef"
 
 S = "${WORKDIR}/git"
 
-DEPENDS = "re openssl alsa-lib pipewire libopus glib-2.0 glib-2.0-native python3-packaging-native"
+DEPENDS = "re spandsp openssl alsa-lib pipewire libopus glib-2.0 glib-2.0-native python3-packaging-native"
 RDEPENDS:${PN} += "glib-2.0"
 
 inherit cmake pkgconfig systemd python3native
