@@ -5,9 +5,9 @@ GO_IMPORT = "github.com/sz-annax/device-service"
 
 SRC_URI = "git://git@${GO_IMPORT}.git;protocol=ssh;destsuffix=${BPN}-${PV}/src/${GO_IMPORT};branch=main \
            file://device-config.yaml \
-           file://device.service \
+           file://device-service.service \
           "
-SRCREV = "e515b653f22a578c8f158506aa24ef8d82487f7c"
+SRCREV = "c3c24bba6e2df8f885465c5c93fbbaadf039dcb0"
 
 # Upstream repo does not tag
 UPSTREAM_CHECK_COMMITS = "1"
@@ -21,7 +21,7 @@ do_compile[network] = "1"
 B = "${S}/src/${GO_IMPORT}/bin"
 
 # Version and build information
-GO_EXTRA_LDFLAGS += ' -X ${GO_IMPORT}/conf.VERSION=${PV} -X ${GO_IMPORT}/conf.BUILD=${SRCREV}'
+GO_EXTRA_LDFLAGS += ' -X ${GO_IMPORT}/conf.VERSION=${PV} -X ${GO_IMPORT}/conf.BUILD=${@d.getVar("SRCREV")[:7]}'
 
 CGO_ENABLED = "1"
 GO_INSTALL = "."
@@ -40,10 +40,14 @@ do_install:append() {
     install -d ${D}${sysconfdir}/pcu
     install -m 0644 ${UNPACKDIR}/device-config.yaml ${D}${sysconfdir}/pcu
 
-    # /usb/lib/systemd/system/device.service
+    # /usr/lib/systemd/system/device-service.service
     install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${UNPACKDIR}/device.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${UNPACKDIR}/device-service.service ${D}${systemd_unitdir}/system
 }
 
-SYSTEMD_SERVICE:${PN} = "device.service"
+FILES:${PN} += "${systemd_unitdir}/device-service.service"
+
+SYSTEMD_SERVICE:${PN} = "device-service.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
+
+RDEPENDS:${PN}-dev += "bash"

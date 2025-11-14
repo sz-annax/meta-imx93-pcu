@@ -1,0 +1,13 @@
+[Unit]
+Description=Device Management Services
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/device-service
+Restart=always
+RestartSec=5s
+User=root
+
+[Install]
+WantedBy=multi-user.target
