@@ -1,5 +1,5 @@
-SUMMARY = "ACP rootfs upgrade package generator"
-DESCRIPTION = "Generates ACP upgrade tarball from existing deploy images"
+SUMMARY = "ACC rootfs upgrade package generator"
+DESCRIPTION = "Generates ACC upgrade tarball from existing deploy images"
 LICENSE = "CLOSED"
 
 SRC_URI = "file://gen_pcu.py"
@@ -8,8 +8,8 @@ S = "${UNPACKDIR}"
 
 inherit python3native
 
-TARGET_NAME ?= "ACP"
-TARGET_TYPE ?= "ACP"
+TARGET_NAME ?= "ACC"
+TARGET_TYPE ?= "ACC"
 IMAGE_TYPE ?= "rootfs"
 
 IMAGES_DIR ?= "${DEPLOY_DIR_IMAGE}"
@@ -30,7 +30,7 @@ do_compile() {
         --target-version "${PV}" \
         --target-name "${TARGET_NAME}" \
         --target-type "${TARGET_TYPE}" \
-        --rootfs "${IMAGES_DIR}/acp-image-imx93-pcu.rootfs.tar.zst"
+        --rootfs "${IMAGES_DIR}/acc-image-imx93-pcu.rootfs.tar.zst"
 
 }
 
