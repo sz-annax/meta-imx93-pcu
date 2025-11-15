@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 import tarfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -47,6 +48,7 @@ def main():
 
     if args.output_dir:
         OUT_DIR = Path(args.output_dir)
+        os.makedirs(OUT_DIR, exist_ok=True)
     else:
         raise ValueError("Output directory must be specified with --output-dir")
 

@@ -15,7 +15,7 @@ TARGET_TYPE ?= "ACP"
 IMAGE_TYPE ?= "factory"
 
 IMAGES_DIR ?= "${DEPLOY_DIR_IMAGE}"
-OUT_DIR ?= "${DEPLOY_DIR_IMAGE}"
+OUT_DIR ?= "${TMPDIR}/annax"
 
 do_compile() {
     echo "==== factory package generation ===="

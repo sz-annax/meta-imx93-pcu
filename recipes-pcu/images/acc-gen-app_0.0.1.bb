@@ -16,7 +16,7 @@ IMAGE_TYPE ?= "deb"
 DEB_FILES = 'acc-app,device-service'
 
 IMAGES_DIR ?= "${DEPLOY_DIR_IMAGE}"
-OUT_DIR ?= "${DEPLOY_DIR_IMAGE}"
+OUT_DIR ?= "${TMPDIR}/annax"
 
 do_compile() {
     echo "==== deb package generation ===="

@@ -13,7 +13,7 @@ TARGET_TYPE ?= "PECU"
 IMAGE_TYPE ?= "rootfs"
 
 IMAGES_DIR ?= "${DEPLOY_DIR_IMAGE}"
-OUT_DIR ?= "${DEPLOY_DIR_IMAGE}"
+OUT_DIR ?= "${TMPDIR}/annax"
 
 do_compile() {
     echo "==== rootfs package generation ===="
