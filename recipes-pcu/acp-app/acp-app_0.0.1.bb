@@ -6,7 +6,7 @@ SRC_URI = "git://git@github.com/sz-annax/acp-app.git;protocol=ssh;branch=main \
            file://acp-app.service \
            file://my-echo-cancel.conf \ 
         "
-SRCREV = "89c2c10e7f57ed30678fe86b00b07805f22cc51e"
+SRCREV = "d7fde222d02d1921b94b78e87c512e94bb7b1fd8"
 
 S = "${WORKDIR}/git"
 

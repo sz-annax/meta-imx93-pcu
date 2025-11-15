@@ -7,7 +7,7 @@ SRC_URI = "git://git@${GO_IMPORT}.git;protocol=ssh;destsuffix=${BPN}-${PV}/src/$
            file://device-config.yaml \
            file://device-service.service \
           "
-SRCREV = "c3c24bba6e2df8f885465c5c93fbbaadf039dcb0"
+SRCREV = "d7b9c87eaa162e6f640f545c5cbbe0b1c417b4de"
 
 # Upstream repo does not tag
 UPSTREAM_CHECK_COMMITS = "1"
