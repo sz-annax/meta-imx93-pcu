@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 
 SRC_URI = "file://gen_pcu.py \
            file://recoveryImage \
-           file://recovery-rootfs-imx93.img"
+           file://recovery-rootfs.img"
 
 S = "${UNPACKDIR}"
 
@@ -34,11 +34,11 @@ do_compile() {
         --target-type "${TARGET_TYPE}" \
         --uboot "${IMAGES_DIR}/imx-boot" \
         --kernel-image "${IMAGES_DIR}/Image" \
-        --dtb "${IMAGES_DIR}/imx93-acc-audio.dtb" \
+        --dtb "${IMAGES_DIR}/imx93-acc.dtb" \
         --rootfs "${IMAGES_DIR}/acc-image-imx93-pcu.rootfs.tar.zst" \
-        --recovery-dtb "${IMAGES_DIR}/imx93-acc-recovery.dtb" \
+        --recovery-dtb "${IMAGES_DIR}/imx93-pcu-recovery.dtb" \
         --recovery-image "${UNPACKDIR}/recoveryImage" \
-        --recovery-rootfs "${UNPACKDIR}/recovery-rootfs-imx93.img"
+        --recovery-rootfs "${UNPACKDIR}/recovery-rootfs.img"
 }
 
 do_install[noexec] = "1"

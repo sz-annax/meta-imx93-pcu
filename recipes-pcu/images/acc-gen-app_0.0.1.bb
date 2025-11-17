@@ -34,6 +34,7 @@ do_compile() {
         --target-type "${TARGET_TYPE}" \
         --deploy-dir-deb "${DEPLOY_DIR_DEB}/${PACKAGE_ARCH}" \
         --deb-list "${DEB_FILES}"
+
 }
 
 do_install[noexec] = "1"

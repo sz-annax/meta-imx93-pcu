@@ -108,7 +108,7 @@ def main():
                 "sha": sha
             }
         elif p is not None:
-            raise ValueError(f"file not exist: {f}")
+            raise ValueError(f"file not exist: {p}")
 
     # JSON
     with open(JSON_FILE, "w") as f:
