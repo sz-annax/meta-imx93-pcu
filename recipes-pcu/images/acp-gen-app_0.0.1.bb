@@ -8,7 +8,6 @@ S = "${UNPACKDIR}"
 
 inherit python3native
 
-DEPENDS = "acp-app device-service"
 
 TARGET_NAME ?= "ACP"
 TARGET_TYPE ?= "ACP"

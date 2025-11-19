@@ -2,7 +2,7 @@ SUMMARY = "ACC Python Application Service"
 DESCRIPTION = "ACC Python application that runs as a systemd service."
 LICENSE = "CLOSED"
 
-SRC_URI = "git://git@github.com/sz-annax/acc-app.git;protocol=ssh;branch=main \
+SRC_URI = "git://git@github.com/sz-annax/acc-hc.git;protocol=ssh;branch=main \
            file://acc-app.service \
            file://my-echo-cancel.conf \
         "

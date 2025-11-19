@@ -8,7 +8,6 @@ S = "${UNPACKDIR}"
 
 inherit python3native
 
-DEPENDS = "acc-app device-service"
 
 TARGET_NAME ?= "ACC"
 TARGET_TYPE ?= "ACC"

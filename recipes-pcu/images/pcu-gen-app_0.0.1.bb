@@ -8,7 +8,6 @@ S = "${UNPACKDIR}"
 
 inherit python3native
 
-DEPENDS = "pei-app device-service"
 
 TARGET_NAME ?= "PCU-IP"
 TARGET_TYPE ?= "PECU"
