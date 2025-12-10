@@ -1,6 +1,7 @@
 [Unit]
 Description=Baresip SIP User-Agent
-After=dbus.service
+Wants=network-online.target
+After=dbus.service network-online.target
 
 [Service]
 Type=simple

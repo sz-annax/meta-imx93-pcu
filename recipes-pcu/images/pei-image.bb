@@ -64,6 +64,7 @@ IMAGE_INSTALL += " \
     net-snmp \
     journal-mount \
     baresip \
+    baresip-apps \
     device-service \
     pei-app \
 "
