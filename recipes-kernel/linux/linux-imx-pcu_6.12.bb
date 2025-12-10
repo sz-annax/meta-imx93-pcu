@@ -24,7 +24,7 @@ SRCBRANCH = "main"
 KBRANCH = "${SRCBRANCH}"
 # LOCALVERSION = "-lts-next"
 LOCALVERSION = "-v1.0.0"
-SRCREV = "e99dc6ece27b75832c1585ff5ff1b9108282c7c6"
+SRCREV = "c8f264b4fea996c343bccd80df7545d9efc6ce2e"
 
 # PV is defined in the base in linux-imx.inc file and uses the LINUX_VERSION definition
 # required by kernel-yocto.bbclass.
