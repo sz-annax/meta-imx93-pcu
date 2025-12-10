@@ -1,0 +1,52 @@
+From 5bb6bdb5570050a8aa40bcac83365b61eea6d4b5 Mon Sep 17 00:00:00 2001
+From: bruce <zhengjing.zhu@wabtec.com>
+Date: Wed, 10 Dec 2025 09:57:46 +0800
+Subject: [PATCH] update codec handling to support L16 payload type
+
+Upstream-Status: Inappropriate [embedded specific]
+
+Signed-off-by: bruce <zhengjing.zhu@wabtec.com>
+---
+ modules/multicast/player.c   | 4 ++--
+ modules/multicast/receiver.c | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/modules/multicast/player.c b/modules/multicast/player.c
+index d534af8..09764b9 100644
+--- a/modules/multicast/player.c
++++ b/modules/multicast/player.c
+@@ -162,8 +162,8 @@ int mcplayer_decode(const struct rtp_header *hdr, struct mbuf *mb, bool drop)
+ 	if (!player->ac)
+ 		return 0;
+ 
+-	if (hdr->ext && hdr->x.len && mb)
+-		return ENOTSUP;
++	// if (hdr->ext && hdr->x.len && mb)
++	// 	return ENOTSUP;
+ 
+ 	if (player->ssrc != hdr->ssrc)
+ 		aubuf_flush(player->aubuf);
+diff --git a/modules/multicast/receiver.c b/modules/multicast/receiver.c
+index 43680c4..9e25860 100644
+--- a/modules/multicast/receiver.c
++++ b/modules/multicast/receiver.c
+@@ -170,6 +170,10 @@ static const struct aucodec *pt2codec(const struct rtp_header *hdr)
+ 			codec = aucodec_find(baresip_aucodecl(), "G722", 0, 1);
+ 			break;
+ 
++		case 109:
++			codec = aucodec_find(baresip_aucodecl(), "L16", 32000, 1);
++			break;
++
+ 		default:
+ 			warning ("multicast receiver: RTP Payload "
+ 				"Type %d not found.\n", hdr->pt);
+@@ -516,7 +520,7 @@ static int pt_to_srate(int pt)
+ 	case 0:  return 8000;   /* PCMU */
+ 	case 8:  return 8000;   /* PCMA */
+ 	case 9:  return 16000;  /* G722 */
+-
++	case 109:return 32000;  /* L16  */
+ 	default: return 0;
+ 	}
+ }
