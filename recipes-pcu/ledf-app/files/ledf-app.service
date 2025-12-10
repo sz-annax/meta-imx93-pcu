@@ -1,0 +1,16 @@
+[Unit]
+Description=LEDF Python Application Service
+Requires=baresip.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/share/ledf-app/main.py
+WorkingDirectory=/usr/share/ledf-app
+Restart=always
+RestartSec=5
+User=root
+# output will be displayed in real-time
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
