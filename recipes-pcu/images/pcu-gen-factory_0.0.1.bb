@@ -34,7 +34,7 @@ do_compile() {
         --target-type "${TARGET_TYPE}" \
         --uboot "${IMAGES_DIR}/imx-boot" \
         --kernel-image "${IMAGES_DIR}/Image" \
-        --dtb "${IMAGES_DIR}/imx93-pcu-audio.dtb" \
+        --dtb "${IMAGES_DIR}/imx93-pcu-ip.dtb" \
         --rootfs "${IMAGES_DIR}/pei-image-imx93-pcu.rootfs.tar.zst" \
         --recovery-dtb "${IMAGES_DIR}/imx93-pcu-recovery.dtb" \
         --recovery-image "${UNPACKDIR}/recoveryImage" \

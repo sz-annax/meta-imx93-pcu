@@ -8,7 +8,7 @@ SRC_URI = "git://git@github.com/sz-annax/pei-app.git;protocol=ssh;branch=main \
            file://my-echo-cancel.conf \
         "
 
-SRCREV = "325e6b1a63476c2b488a095158fb760e5c8eb589"
+SRCREV = "b0a9bc1a46d22727400f39530549565c230adb38"
 
 S = "${WORKDIR}/git"
 
