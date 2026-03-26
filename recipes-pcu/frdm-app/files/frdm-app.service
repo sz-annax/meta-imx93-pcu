@@ -1,0 +1,16 @@
+[Unit]
+Description=FRDM Application Service
+Requires=baresip.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/share/frdm-app/main.py
+WorkingDirectory=/usr/share/frdm-app
+Restart=always
+RestartSec=5
+User=root
+# output will be displayed in real-time
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
