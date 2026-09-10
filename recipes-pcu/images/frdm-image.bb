@@ -10,36 +10,30 @@ EXTRA_USERS_PARAMS = "\
     usermod -p '${PASSWD}' root; \
     "
 
+
 IMAGE_FEATURES += " \
+    debug-tweaks \
     tools-profile \
+    tools-sdk \
     package-management \
     ssh-server-openssh \
-    splash \
-    hwcodecs \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'weston', \
-       bb.utils.contains('DISTRO_FEATURES',     'x11', 'x11-base x11-sato', \
-                                                       '', d), d)} \
+    nfs-client \
 "
 
 CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-core-full-cmdline \
     packagegroup-fsl-tools-audio \
-    packagegroup-fsl-gstreamer1.0 \
-    packagegroup-fsl-gstreamer1.0-full \
     packagegroup-app-tools \
     firmwared \
 "
 
-DEFAULT_TIMEZONE = "Asia/Shanghai"
-ENABLE_BINARY_LOCALE_GENERATION = "1"
-IMAGE_LINGUAS:append = " en-us en-gb es-us zh-cn"
-GLIBC_GENERATE_LOCALES:append = " en_US.UTF-8 es_US.UTF-8 en_GB.UTF-8 zh_CN.UTF-8"
-
 IMAGE_INSTALL += " \
     chrony \
-    coreutils \
-    git cmake vim tree \
+    git \
+    cmake vim tree \
+    pipewire-alsa \
     python3-paho-mqtt \
+    python3-pygobject \
     python3-gpiod \
     python3-evdev \
     python3-numpy \
@@ -47,9 +41,9 @@ IMAGE_INSTALL += " \
     python3-sqlite3 \
     python3-netifaces \
     python3-posix-ipc \
-    libvpx \
-    sox \
+    sox libmad mpg123 \
     curl \
+    evtest \
     tzdata \
     v4l-utils \
     libv4l \
@@ -62,10 +56,11 @@ IMAGE_INSTALL += " \
     libubootenv-bin \
     htop \
     i2c-tools \
-    glibc-utils glibc-gconv \
-    tzdata-core tzdata-asia \
-    device-service \
+    sqlite3 \
+    net-snmp \
+    journal-mount \
     baresip \
-    lvgl-demo-fb \
+    baresip-apps \
+    device-service \
     frdm-app \
 "

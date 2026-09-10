@@ -3,7 +3,6 @@ LICENSE = "MIT"
 
 inherit core-image extrausers
 
-require dynamic-layers/qt6-layer/recipes-fsl/images/imx-image-full.bb
 
 # printf "%q" $(mkpasswd -m sha256crypt fahel)
 PASSWD = "\$5\$Hv7.3840I6SB21jN\$.xw0MzN1SbQFaKMhewg4GFMDetCHg4wBuuBxKkxNUa5"
@@ -31,12 +30,10 @@ CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-fsl-tools-audio \
     packagegroup-app-tools \
     firmwared \
-    chromium-ozone-wayland \
 "
 
 IMAGE_INSTALL += " \
-    fontconfig \
-    ttf-wqy-zenhei \
+    chrony \
     git \
     cmake \
     vim \

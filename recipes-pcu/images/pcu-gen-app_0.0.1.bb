@@ -9,7 +9,7 @@ S = "${UNPACKDIR}"
 inherit python3native
 
 
-TARGET_NAME ?= "PCU-IP"
+TARGET_NAME ?= "PCU"
 TARGET_TYPE ?= "PECU"
 IMAGE_TYPE ?= "deb"
 DEB_FILES = 'pei-app,device-service'

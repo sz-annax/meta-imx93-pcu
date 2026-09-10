@@ -12,9 +12,9 @@ LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a
 
 SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
 UBOOT_SRC ?= "git://github.com/sz-annax/u-boot-imx-pcu.git;protocol=https"
-SRCBRANCH = "imx93_2G_DDR4"
+SRCBRANCH = "main"
 LOCALVERSION ?= "-${SRCBRANCH}"
-SRCREV = "eca802d18a690372d153954683a875346986c781"
+SRCREV = "5a281a7b6b27e03cd4d6695e167e9d08beb35f97"
 
 DEPENDS += " \
     bc-native \
