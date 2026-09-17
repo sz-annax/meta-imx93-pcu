@@ -6,6 +6,7 @@ GO_IMPORT = "github.com/sz-annax/device-service"
 SRC_URI = "git://git@${GO_IMPORT}.git;protocol=ssh;destsuffix=${BPN}-${PV}/src/${GO_IMPORT};branch=main \
            file://device-config.yaml \
            file://device-service.service \
+           file://0001-pmq-use-public-time-t.patch;patchdir=src/${GO_IMPORT} \
           "
 SRCREV = "d7b9c87eaa162e6f640f545c5cbbe0b1c417b4de"
 

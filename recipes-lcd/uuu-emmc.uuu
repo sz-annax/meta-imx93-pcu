@@ -1,0 +1,21 @@
+uuu_version 1.5.165
+
+SDP: boot -f u-boot.imx
+
+FB: ucmd test "${uuu_board}" = "imx6u-lcd"
+FB: ucmd setenv fastboot_dev mmc3
+FB: ucmd setenv target_ubootdev 3
+FB: ucmd setenv mmcdev 3
+FB: ucmd mmc dev 3 1
+FB: ucmd mmc info
+FB: ucmd mmc dev 3 0
+FB: flash -raw2sparse all pcu-ip-image-imx6u-lcd.rootfs.wic.zst/*
+FB: ucmd mmc dev 3 0
+FB: ucmd mmc rescan
+FB: ucmd part uuid mmc 3:2 rootuuid
+FB: ucmd load mmc 3:1 ${loadaddr} zImage
+FB: ucmd load mmc 3:1 ${fdt_addr_r} imx6dl-imx6u-lcd.dtb
+FB: flash bootloader u-boot.imx
+FB: ucmd mmc partconf 3 0 1 0
+FB: ucmd mmc dev 3 0
+FB: done

@@ -1,0 +1,51 @@
+Subject: [PATCH] Fix fixed-point tone detector syntax
+
+The fixed-point branch is missing a semicolon after tone_to_total_energy,
+causing compilation to fail at the following tone_rx_init declaration.
+Both fixed-point Goertzel threshold macros also lack a closing parenthesis
+around the scaling factor. Match the grouping of the floating-point macros.
+Fix the missing semicolon and malformed comments in super_tone_rx as well.
+
+Upstream-Status: Pending
+
+diff --git a/src/ademco_contactid.c b/src/ademco_contactid.c
+--- a/src/ademco_contactid.c
++++ b/src/ademco_contactid.c
+@@ -449,7 +449,7 @@
+ //static const int detection_threshold            = goertzel_threshold_dbm0(GOERTZEL_SAMPLES_PER_BLOCK, -42.0f);
+ static const int detection_threshold            = 3035;         /* -42dBm0 */
+ //static const float tone_to_total_energy         = GOERTZEL_SAMPLES_PER_BLOCK*db_to_power_ratio(-0.85f);
+-static const float tone_to_total_energy         = 45.2233f      /* -0.85dB */
++static const float tone_to_total_energy         = 45.2233f;     /* -0.85dB */
+ #else
+ //static const float detection_threshold          = goertzel_threshold_dbm0(GOERTZEL_SAMPLES_PER_BLOCK, -42.0f);
+ static const float detection_threshold          = 49728296.6f;  /* -42dBm0 */
+
+diff --git a/src/spandsp/tone_detect.h b/src/spandsp/tone_detect.h
+--- a/src/spandsp/tone_detect.h
++++ b/src/spandsp/tone_detect.h
+@@ -62,7 +62,7 @@
+ #if defined(SPANDSP_USE_FIXED_POINT)
+-#define goertzel_threshold_dbm0(len,thresh)     (int) ((len*len*256.0*256.0/2.0*pow(10.0, (thresh - DBM0_MAX_SINE_POWER)/10.0))
+-#define goertzel_threshold_dbmov(len,thresh)    (int) ((len*len*256.0*256.0/2.0*pow(10.0, (thresh - DBMOV_MAX_SINE_POWER)/10.0))
++#define goertzel_threshold_dbm0(len,thresh)     (int) ((len*len*256.0*256.0/2.0)*pow(10.0, (thresh - DBM0_MAX_SINE_POWER)/10.0))
++#define goertzel_threshold_dbmov(len,thresh)    (int) ((len*len*256.0*256.0/2.0)*pow(10.0, (thresh - DBMOV_MAX_SINE_POWER)/10.0))
+ #else
+ #define goertzel_threshold_dbm0(len,thresh)     (float) ((len*len*32768.0*32768.0/2.0)*pow(10.0, (thresh - DBM0_MAX_SINE_POWER)/10.0))
+ #define goertzel_threshold_dbmov(len,thresh)    (float) ((len*len*32768.0*32768.0/2.0)*pow(10.0, (thresh - DBMOV_MAX_SINE_POWER)/10.0))
+ #endif
+
+diff --git a/src/super_tone_rx.c b/src/super_tone_rx.c
+--- a/src/super_tone_rx.c
++++ b/src/super_tone_rx.c
+@@ -59,8 +59,8 @@
+ #if defined(SPANDSP_USE_FIXED_POINT)
+ //static const int detection_threshold        = energy_threshold_dbm0(SUPER_TONE_BINS, -42);
+-static const int detection_threshold        = 16439             /* -42dBm0 
++static const int detection_threshold        = 16439;            /* -42dBm0 */
+ //static const int tone_twist                 = 4;
+-static const int tone_twist                 = 4;                /* 6dB &/
++static const int tone_twist                 = 4;                /* 6dB */
+ //static const int tone_to_total_energy       = SUPER_TONE_BINS*64;
+ static const int tone_to_total_energy       = 64;               /* -3dB */
+ #else

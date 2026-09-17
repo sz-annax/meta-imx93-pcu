@@ -14,7 +14,7 @@ SRC_URI = "${UBOOT_SRC};branch=${SRCBRANCH}"
 UBOOT_SRC ?= "git://github.com/sz-annax/u-boot-imx-pcu.git;protocol=https"
 SRCBRANCH = "main"
 LOCALVERSION ?= "-${SRCBRANCH}"
-SRCREV = "5a281a7b6b27e03cd4d6695e167e9d08beb35f97"
+SRCREV = "3b5c4fa8944d3d2802f348c728087873e21fee43"
 
 DEPENDS += " \
     bc-native \

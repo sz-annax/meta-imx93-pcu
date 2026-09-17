@@ -13,6 +13,7 @@ PIPEWIRE_TOOLS = " \
     ${PIPEWIRE_V4L2} \
 "
 PIPEWIRE_V4L2 = "pipewire-v4l2"
+PIPEWIRE_V4L2:arm:imx-nxp-bsp = ""
 
 RDEPENDS:${PN} = " \
     can-utils \
