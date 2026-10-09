@@ -631,7 +631,8 @@ The fragment disables the legacy IPU and LDB drivers to prevent two drivers
 claiming the same hardware. Existing GPU properties and other machines are
 unchanged. DRM framebuffer emulation is enabled, but applications relying on
 NXP-specific framebuffer ioctls or vendor EGL integrations need separate
-compatibility checks. No Weston, GPU userspace or application changes are made.
+compatibility checks. The Weston and Chromium integration below is separate
+from this kernel configuration.
 
 The existing machine-specific Yocto append merges this fragment and tracks it
 for externalsrc builds. Rebuild from the BSP root:
@@ -667,6 +668,80 @@ installed) to check RGB channels, alternating odd/even columns and the visible
 1000 ms power-off before restart with an oscilloscope. Also test display
 blank/unblank, suspend/resume and warm reboot. Build checks are not hardware
 qualification and do not validate the physical PWM inversion or LVDS wiring.
+
+## Chromium on the LCD
+
+The LCD image includes `chromium-lcd`, which depends on
+`chromium-ozone-wayland` and supplies a non-root systemd launcher. The prepared
+`build_imx6u_lcd/conf/bblayers.conf` now includes
+`${BSPDIR}/sources/meta-browser/meta-chromium`; retain this entry when
+recreating the build directory. The local multimedia Chromium append remains
+masked: it enables proprietary video codecs for a different board.
+
+This uses Chromium 129.0.6668.100 from the existing layer and the NXP dynamic
+layer's i.MX6 Vivante patches. The generated launcher uses Wayland and native
+EGL (`--ozone-platform=wayland --use-gl=egl`). NXP disables GBM on i.MX6 and
+removes bundled ANGLE EGL/GLES libraries so that the system Vivante libraries
+are used. Keep the NXP GPU workarounds, including disabled MSAA and GPU
+rasterization; GPU compositing and GPU rasterization are different features.
+VA-API, V4L2 hardware codecs and proprietary codecs are not enabled here.
+
+A version-specific LCD patch fixes Chromium 129's media GPU sandbox GN
+configuration: without hardware codecs, it must not require Mesa's `dri.pc`
+from the Vivante EGL stack. This does not disable the browser sandbox.
+
+Weston GL rendering has been confirmed on the board with
+`GL renderer: Vivante GC880`. That does not establish browser acceleration.
+Chromium patch application and GN configuration, plus the launcher install
+task, have passed; a full Chromium/image build and browser board test are
+still required.
+
+Build and deploy the root filesystem:
+
+```sh
+source setup-environment build_imx6u_lcd
+bitbake imx6u-lcd-image
+```
+
+Chromium is a large host build even for simple target pages. The host checked
+during integration had about 148 GiB free disk and 94 GiB RAM. Monitor disk
+usage and memory during compilation; keep the prepared build's five-job
+parallelism initially. This integration does not require kernel/DTB changes.
+
+The service is deliberately disabled until board acceptance. On the board,
+set the URL in `/etc/default/chromium-lcd` to `chrome://gpu` for validation or
+to the application's URL, then run:
+
+```sh
+systemctl start chromium-lcd.service
+systemctl status chromium-lcd.service --no-pager
+journalctl -b -u chromium-lcd.service --no-pager
+```
+
+It runs as the existing `weston` user, with a private runtime directory,
+profile in `/var/lib/chromium-lcd`, and access to Weston's `/run/wayland-0`
+socket through the `wayland` group. Do not start Chromium as root or add
+`--no-sandbox`. The kernel configuration supports namespaces and seccomp;
+the installed Chromium setuid sandbox and device permissions also need to
+be retained by deployment.
+
+In `chrome://gpu`, require hardware-accelerated compositing and a Vivante
+renderer, not SwiftShader or llvmpipe. GPU rasterization may remain disabled
+by the NXP workaround; video decoding is outside this acceptance test. Check
+scrolling, CSS animations and page reloads on the actual lightweight
+application, and observe CPU/RAM usage over repeated navigation. The
+renderer-process limit is a soft process limit, not a memory cap. Once the
+application passes, enable the launcher at boot:
+
+```sh
+systemctl enable chromium-lcd.service
+```
+
+Chromium 129 is an old BSP integration baseline, not a current secure browser
+release. Restrict this initial deployment to trusted controlled content;
+before production or arbitrary Internet access, update the browser and
+revalidate the NXP patches. Avoid unnecessary tabs, extensions and large
+JavaScript workloads on the dual-core, 1 GiB target.
 
 ## Remaining Hardware Questions
 

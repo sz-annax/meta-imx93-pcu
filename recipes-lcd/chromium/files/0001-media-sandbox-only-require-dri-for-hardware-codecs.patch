@@ -1,0 +1,23 @@
+Subject: [PATCH] media: only require DRI configuration for hardware codecs
+
+The Vivante EGL stack has no Mesa dri.pc. The hardware video sandbox
+hooks do not require DRI_DRIVER_DIR when both VA-API and V4L2 codecs are
+disabled. Avoid an unused Mesa dependency for this configuration.
+
+Upstream-Status: Pending
+
+diff --git a/media/gpu/sandbox/BUILD.gn b/media/gpu/sandbox/BUILD.gn
+--- a/media/gpu/sandbox/BUILD.gn
++++ b/media/gpu/sandbox/BUILD.gn
+@@ -31,7 +31,7 @@ source_set("sandbox") {
+     deps += [ "//media/gpu/v4l2" ]
+   }
+   if (current_cpu != "s390x" && current_cpu != "ppc64" && is_linux &&
+-      !is_castos) {
++      !is_castos && (use_vaapi || use_v4l2_codec)) {
+     # For DRI_DRIVER_DIR.
+     configs += [ "//build/config/linux/dri" ]
+   }
+
+-- 
+2.34.1

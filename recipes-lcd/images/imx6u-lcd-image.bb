@@ -96,5 +96,5 @@ IMAGE_INSTALL += " \
     device-service \
 "
 
-IMAGE_INSTALL:append = " weston weston-init weston-examples"
+IMAGE_INSTALL:append = " weston weston-init weston-examples chromium-lcd"
 SYSTEMD_DEFAULT_TARGET = "graphical.target"

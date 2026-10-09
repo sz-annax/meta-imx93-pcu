@@ -1,0 +1,23 @@
+[Unit]
+Description=Chromium for the IM356 LCD
+Requires=weston.service
+After=weston.service
+
+[Service]
+Type=simple
+User=weston
+Group=weston
+RuntimeDirectory=chromium-lcd
+RuntimeDirectoryMode=0700
+StateDirectory=chromium-lcd
+StateDirectoryMode=0700
+Environment=XDG_RUNTIME_DIR=/run/chromium-lcd
+Environment=WAYLAND_DISPLAY=/run/wayland-0
+Environment=CHROMIUM_URL=about:blank
+EnvironmentFile=-/etc/default/chromium-lcd
+ExecStart=/usr/bin/chromium --user-data-dir=/var/lib/chromium-lcd --no-first-run --no-default-browser-check --disable-background-networking --disable-sync --renderer-process-limit=2 ${CHROMIUM_URL}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target
