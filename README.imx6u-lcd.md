@@ -2,7 +2,9 @@
 
 This is an experimental board port sharing the PCU-IP image, not a production
 BSP or a hardware-validated release. The first acceptance criterion is a stable U-Boot
-console followed by Linux login from microSD. LCD output is intentionally off.
+console followed by Linux login from microSD. The optional hardware population
+with an AUO P294IVN02.0 now has Linux LVDS support; backlight brightness defaults
+to zero until the panel supply, cable and LVDS straps have been checked.
 
 ## Hardware Basis
 
@@ -26,9 +28,9 @@ Cortex-A9 cores. With the board's 24 MHz crystal, its 800 MHz speed grade means
 | Ethernet | FEC RMII to IP101GR, MDIO address 1 | Linux driver, polling PHY |
 | RMII clock | IP101 50 MHz output to GPIO_16 | External input, not SoC clock output |
 | PHY reset | GPIO_17 = GPIO7_IO12 | Active low; also resets IP175 |
-| LCD panel power | EIM_D28 = GPIO3_IO28 | Held low |
-| Backlight enable | SD1_DAT0 = GPIO1_IO16 | Held low |
-| Backlight PWM | SD1_CMD / PWM4, transistor inversion | Disabled |
+| LCD panel power | EIM_D28 = GPIO3_IO28 | DRM panel-controlled 12 V enable |
+| Backlight enable | SD1_DAT0 = GPIO1_IO16 | PWM backlight, initially off |
+| Backlight PWM | SD1_CMD / PWM4, transistor inversion | Inverted 1 kHz PWM |
 
 The Ethernet topology is FEC -> RMII IP101 -> analog MDI -> IP175 port 0,
 not a conventional direct MAC-to-switch CPU port. No DSA configuration or
@@ -81,14 +83,16 @@ PipeWire and Go version policy. It also carries over the existing
 `build_imx93` acceptance of `commercial` license flags required by libmad
 and other multimedia components.
 
-It uses official `linux-imx` and `u-boot-imx`, with machine-scoped appends
-under `recipes-lcd`. The distro masks only the old PCU bootloader/kernel
-recipes, the base-files append containing another board's `fw_env.config`,
+It uses `linux-imx-pcu` and `u-boot-imx-pcu`. Board sources are maintained in
+their own Git repositories, not installed over upstream files by this layer.
+The machine-scoped kernel append selects the source-owned config fragment.
+The distro masks the base-files append containing another board's `fw_env.config`
 and GoPoint/Chromium/ONNX appends whose layers are not enabled in this build.
 Do not restore the old broad `recipes-(?!lcd/)` BBMASK: it hides
 `pcu-ip-image` and causes `Nothing PROVIDES 'pcu-ip-image'`.
 
-`bitbake pcu-ip-image` completed successfully with the USB/Fastboot changes.
+Before the local-source migration, `bitbake pcu-ip-image` completed successfully
+with the USB/Fastboot changes.
 The factory bundle passed UUU 1.5.165 offline parsing, WIC Zstandard integrity
 checking, and comparison of the embedded and standalone U-Boot bytes.
 These are build/artifact checks, not hardware validation. The shared PCU
@@ -103,6 +107,93 @@ signatures; Cortex-A7 and Cortex-A9 target packages are not interchangeable.
 Keep `conf/local.conf.sample`: the setup script uses it to recognize an
 already initialized build directory. Build configuration files live outside
 this layer's Git repository and must be retained separately.
+
+### Local Source Development
+
+The prepared build's `conf/local.conf` enables:
+
+```bitbake
+INHERIT += "externalsrc"
+EXTERNALSRC:pn-u-boot-imx-pcu = "/home/annax/Documents/work/linux/u-boot-imx-pcu"
+EXTERNALSRC:pn-linux-imx-pcu = "/home/annax/Documents/work/linux/linux-imx-pcu"
+EXTERNALSRC_SYMLINKS:pn-u-boot-imx-pcu = ""
+EXTERNALSRC_SYMLINKS:pn-linux-imx-pcu = ""
+```
+
+Uncommitted source changes participate in builds. Outputs remain in Yocto's
+recipe build directories under `tmp/work`; do not build in the source tree.
+Old in-tree products were cleared with `make mrproper` during migration,
+with the user's approval. Do not repeat that command when retaining a custom
+`.config`; save the configuration first. Do not run SDK and BitBake builds
+concurrently against the same source tree.
+
+U-Boot owns `board/annax/imx6u_lcd/`, `configs/imx6u_lcd_defconfig`,
+`include/configs/imx6u-lcd.h`, and the board DTS/DTSI under `arch/arm/dts/`.
+Its independent `TARGET_IMX6U_LCD` does not replace SABRE SD board code.
+Linux owns the board DTS/DTSI under `arch/arm/boot/dts/nxp/imx/` and
+`arch/arm/configs/imx6u-lcd.config`. Both device-tree Makefiles register the
+new DTB. Edit each repository directly and commit its board files together
+with its Kconfig/Makefile integration changes.
+
+From a fresh shell at the BSP root:
+
+```sh
+source setup-environment build_imx6u_lcd
+bitbake -c deploy u-boot-imx-pcu linux-imx-pcu
+bitbake pcu-ip-image
+```
+
+Deploying the two components alone does not rebuild the WIC/rootfs or update
+`imx6u-lcd-download`. Rebuild the image before creating a new factory bundle
+so the kernel and rootfs modules match.
+
+On 2026-09-18, `bitbake -c deploy u-boot-imx-pcu linux-imx-pcu` completed
+successfully from both local trees (1032 tasks, 1014 reused). U-Boot, Linux
+`zImage`, the board DTB, and kernel modules compiled successfully. The final
+kernel configuration enables FEC, ICPLUS_PHY, MMC_SDHCI_ESDHC_IMX, and EXT4_FS
+built-in. The user subsequently confirmed the migrated baseline works on the
+board. The previous WIC/factory bundle was not regenerated by this component
+build. New peripheral support below still requires separate board validation.
+
+With externalsrc, the board append tracks both `imx_v7_defconfig` and
+`imx6u-lcd.config` as inputs to `do_copy_defconfig`. Changing either reruns the
+copy/merge/configure chain, not just compilation. Otherwise a successful build
+can silently retain the old driver configuration.
+
+For reproducible builds elsewhere, first commit and push both source repositories,
+then pin the resulting `SRCREV:imx6u-lcd` values in machine-scoped recipe
+appends and disable the local `EXTERNALSRC` settings. The shared recipes'
+existing SRCREVs intentionally remain unchanged for other boards; those old
+revisions do not contain this new board and cannot build it without externalsrc.
+Do not use `AUTOREV` for a release.
+
+### Existing i.MX6ULL SDK
+
+The SDK's ARM cross-compiler can build this ARMv7 board. Its default application
+flags target Cortex-A7, so use the plain compiler executable and let U-Boot or
+Linux choose CPU flags. In a separate, fresh shell:
+
+```sh
+source /opt/imx6ull-pcu/6.12-styhead/environment-setup-cortexa7t2hf-neon-poky-linux-gnueabi
+unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS KCFLAGS
+export ARCH=arm CROSS_COMPILE=arm-poky-linux-gnueabi-
+export CC=arm-poky-linux-gnueabi-gcc HOSTCC=gcc HOSTCXX=g++
+uboot=/home/annax/Documents/work/linux/u-boot-imx-pcu
+kernel=/home/annax/Documents/work/linux/linux-imx-pcu
+uboot_out="$HOME/build/imx6u-lcd-sdk/u-boot"
+kernel_out="$HOME/build/imx6u-lcd-sdk/linux"
+make -C "$uboot" O="$uboot_out" imx6u_lcd_defconfig
+make -C "$uboot" O="$uboot_out" -j5 u-boot.imx
+make -C "$kernel" O="$kernel_out" imx_v7_defconfig
+make -C "$kernel" O="$kernel_out" imx6u-lcd.config
+make -C "$kernel" O="$kernel_out" -j5 zImage nxp/imx/imx6dl-imx6u-lcd.dtb
+```
+
+SDK validation during migration generated `u-boot.imx`, resolved the kernel
+configuration fragment, and compiled the board DTB. A full SDK `zImage` build
+was not part of that check. Use Yocto for the matching packaged kernel modules
+and complete rootfs. These compile checks do not replace hardware tests or
+validate the i.MX6ULL SDK's user-space libraries for a production Cortex-A9 image.
 
 Outputs are under `build_imx6u_lcd/tmp/deploy/images/imx6u-lcd/`:
 
@@ -378,10 +469,209 @@ trusting eMMC writes. Back up eMMC first. Whole-device WIC writes target the
 eMMC **user area**, not boot0; the factory script separately writes the boot0
 bootloader and selects it via EXT_CSD. Boot straps must still select USDHC4.
 
+## Peripheral Bring-Up
+
+The following additions are in the local Linux repository's board DTS and
+`arch/arm/configs/imx6u-lcd.config`, not layer-owned copies. SDK DTB compilation
+and `bitbake -c deploy linux-imx-pcu` passed (911 tasks, 894 reused on the final
+run). Every requested built-in option was checked against the actual Yocto
+`.config`; kernel, DTB and modules compiled and deployed. DT schema validation
+was not run because its tools were unavailable. No new peripheral has yet been
+verified electrically or exercised on this board. Rebuild `pcu-ip-image` before
+flashing a complete image; the existing WIC and factory bundle are unchanged.
+
+| Peripheral | Connection | Enabled interface |
+| --- | --- | --- |
+| PCF85263 RTC | I2C1, CSI0_DAT9/8, address 0x51 | `rtc0`; SoC SNVS becomes `rtc1` |
+| ADS1015 ADC | I2C2, KEY_COL3/ROW3, address 0x48 | IIO, four single-ended inputs |
+| LM75B temperature | I2C2, address 0x49 | hwmon temperature, millidegrees C |
+| Expansion I2C | I2C3 GPIO_3/6; I2C4 NANDF_WP_B/CS3 | 100 kHz, no invented child devices |
+| SLM9670 TPM | ECSPI1 KEY_COL0/ROW0/COL1; CS1 GPIO4_IO10 | TIS SPI at 1 MHz, polling |
+| M41T94 watchdog | ECSPI3 CS0 GPIO5_IO18; WDI GPIO5_IO28 | Existing watchdog driver, mode 3, 60 s default |
+| W25Q32JV NOR | ECSPI3 CS1 GPIO4_IO25 | 4 MiB MTD, 10 MHz, no partitions |
+| FM25L16B FRAM | ECSPI3 CS2 GPIO5_IO19 | 2048-byte AT25/NVMEM, 1 MHz |
+| Factory-reset button | DISP0_DAT9 / GPIO4_IO30, active low | `KEY_RESTART`, 30 ms debounce |
+| ERR LED | EIM_D23 / GPIO3_IO23, active low | `imx6u-lcd:red:error`, initially off |
+| IRM3638 IR receiver | EIM_CS0 / GPIO2_IO23, active low | LIRC, NEC/RC5/RC6 decoding |
+| USB host | USBH1, J20, fixed 5 V supply | USB HID and HID multitouch drivers |
+| USB OTG | LMC USB port | Peripheral mode; configfs ACM/ECM/RNDIS/mass-storage support |
+
+All I2C buses start at 100 kHz. ADS1015 DT channel addresses 4/5/6/7 select
+AIN0/1/2/3; sysfs uses `in_voltage0_raw` through `in_voltage3_raw`. The selected
+PGA range is +/-4.096 V at 1600 samples/s, but the 3.3 V supply still limits
+allowable pin voltage: do not apply 4.096 V to an ADC pin. Scale is in mV/LSB;
+multiply raw by scale for pin voltage, then apply the actual board divider
+ratio. No board-level physical-unit conversion is assumed.
+
+TPM uses the existing SLB9670-compatible TIS binding with `tcg,tpm_tis-spi`
+fallback. GPIO1_IO02 is held high to release reset; IRQ GPIO1_IO04 is unused.
+Confirm SLM9670 identification on hardware. ECSPI3 data pads are DISP0_DAT0/1/2
+for SCLK/MOSI/MISO. USB gadget capabilities alone do not create a gadget or
+export storage; no gadget or watchdog service is added. Touch requires actual
+USB enumeration to confirm that the fitted controller uses HID.
+
+Board-ID bits 0..7 map to GPIO6_IO04, GPIO6_IO02, GPIO6_IO00, GPIO5_IO30,
+GPIO6_IO05, GPIO6_IO03, GPIO6_IO01, GPIO5_IO31. Their pads are muxed as GPIO
+with weak internal pulldowns, not claimed as output GPIOs. Request them as
+inputs with libgpiod after identifying each bank via `gpioinfo`; do not assume
+global gpiochip numbering. Unpopulated strap options can read low from the
+internal bias and do not constitute a valid programmed board ID.
+
+### Read-Only Board Checks
+
+Boot the matching new kernel and DTB, then start with:
+
+```sh
+uname -a
+dmesg | grep -Ei 'pcf85|ads1015|lm75|spi|tpm|m41t94|watchdog|gpio-ir|usb|error|fail'
+cat /sys/class/rtc/rtc*/name
+hwclock -r -f /dev/rtc0
+cat /sys/class/hwmon/hwmon*/name
+cat /sys/class/hwmon/hwmon*/temp1_input
+cat /sys/bus/iio/devices/iio:device*/name
+cat /sys/bus/iio/devices/iio:device*/in_voltage0_raw
+cat /sys/bus/iio/devices/iio:device*/in_voltage0_scale
+ls -l /sys/bus/spi/devices/*/driver
+cat /proc/mtd
+ls /sys/bus/nvmem/devices
+ls /sys/class/tpm
+cat /proc/bus/input/devices
+cat /sys/class/rc/rc*/protocols
+cat /sys/class/leds/imx6u-lcd:red:error/brightness
+ls /sys/bus/usb/devices
+ls /sys/class/udc
+cat /sys/class/watchdog/watchdog*/identity
+cat /sys/class/watchdog/watchdog*/state
+```
+
+Select the device with the matching name if multiple sensors are present.
+An unset RTC may report invalid time until intentionally initialized.
+If installed, `evtest` can observe the button, `ir-keytable -t` can observe IR
+scancodes, and `lsusb` can identify touch hardware. No remote keymap is guessed.
+The button node only generates an input event; no factory-erase handler is
+added. FRAM can be inspected via the matching NVMEM device's `nvmem` file;
+confirm its device/size first. Do not run flash erase/write, TPM provisioning,
+FRAM writes, or broad I2C probing as initial presence checks.
+
+### Watchdog Constraints
+
+M41T94 registration does not call its start operation and no userspace feeding
+service is added. Opening its `/dev/watchdogN` starts it, so use the sysfs
+checks above instead of opening that device for inspection. Probe does not
+disable a watchdog inherited from firmware. The existing driver initializes
+the oscillator during probe; this is not a passive presence test.
+
+The existing rootfs has runtime watchdog disabled but `RebootWatchdogSec=60`.
+Systemd may therefore use its selected watchdog during shutdown/reboot;
+registration order does not guarantee that this is the external device.
+This change does not alter that existing systemd policy. For a bench test
+requiring no systemd watchdog use at all, explicitly set `RuntimeWatchdogSec=0`,
+`RebootWatchdogSec=0` and `KExecWatchdogSec=0` in a system.conf.d drop-in before
+testing, and separately verify firmware/hardware watchdog state.
+
+RUN LED shares WDI and is deliberately not exposed as a separate LED. Its
+state follows the watchdog GPIO. The LMC DBG_IO0-controlled TS5A3159 reset gate
+is not driven by this DTS; verify its bypass/power-cycle behavior externally.
+Do not assume driver registration guarantees that expiry can reset the board.
+The existing shared M41T94 driver's `set_timeout` only updates cached state,
+not an already-running hardware timer. Do not rely on changing the timeout
+after opening the device until that driver behavior is corrected and tested.
+
+## AUO P294IVN02.0 LVDS Display
+
+The Linux board DTS selects this panel population. Do not deploy it to a board
+with a different panel or supply without adapting the configuration. Enabling
+the DRM output can turn on panel power even with backlight brightness zero.
+U-Boot is unchanged and still holds panel power and backlight off.
+
+The input is **1920x1080 at 60 Hz**, although the physical visible area is
+**1920x720**. The AUO Rev 1.0 timing table and the reference GXA function 0x307
+use 1080-line transport. The reference profile reports a visible rectangle of
+`(0, 0, 1920, 720)`. Keep application content inside that rectangle and confirm
+its origin with a test pattern on the actual panel. This patch does not resize
+or crop application/compositor content. The datasheet's conflicting copied
+timing note should be clarified with the supplier before production.
+
+| Parameter | Configuration |
+| --- | --- |
+| Full pixel clock | 148.5 MHz |
+| Horizontal active/front/sync/back | 1920 / 88 / 44 / 148 |
+| Vertical active/front/sync/back | 1080 / 4 / 5 / 36 |
+| Totals | 2200 x 1125 |
+| LVDS | Dual link, RGB888, VESA/SPWG, DE high |
+| Per-link clock | 74.25 MHz |
+| Sync polarity | Negative H, positive V; panel uses DE |
+| Power enable | GPIO3_IO28 high, 30 ms regulator startup allowance |
+| Panel delays | 40 ms prepare, 640 ms enable, 20 ms disable, 1000 ms off |
+| Backlight | GPIO1_IO16 high, PWM4 inverted at 1 kHz, default brightness 0 |
+
+The panel's LVDS_SEL must be high/open for VESA. A JEIDA-strapped assembly
+needs `data-mapping = "jeida-24"` on the panel node instead. Verify the two
+links against the schematic and connector: panel CH1 carries odd-numbered
+pixels, CH2 even-numbered pixels. Do not copy the GXA GM8775C "swapped" setting:
+that is specific to the bridge and its board wiring. This board uses native
+LDB; no GM8775C, CS5518, RK628 or GXA daemon is added. Confirm the measured
+panel rail is 12 V within the datasheet limits; a regulator voltage in DTS
+describes the hardware and does not set a fixed regulator's output voltage.
+
+Implementation is source-owned:
+
+- `drivers/gpu/drm/panel/panel-simple.c`: `auo,p294ivn02-0` mode and delays.
+- `Documentation/devicetree/bindings/display/panel/panel-simple.yaml`: binding.
+- `arch/arm/boot/dts/nxp/imx/imx6dl-imx6u-lcd.dts`: regulator, backlight,
+  panel graph, DRM LDB clocks and dual-channel output.
+- `arch/arm/configs/imx6u-lcd.config`: DRM IPUv3/LDB/panel/PWM support.
+
+LDB parents are selected in the CCM node for the i.MX6 glitch-safe early
+clock-switch sequence. The existing external 50 MHz Ethernet reference is
+still selected, now on the FEC node rather than in the CCM assignment list.
+
+This machine uses DRM/KMS instead of NXP's legacy MXC framebuffer/IPU driver.
+The fragment disables the legacy IPU and LDB drivers to prevent two drivers
+claiming the same hardware. Existing GPU properties and other machines are
+unchanged. DRM framebuffer emulation is enabled, but applications relying on
+NXP-specific framebuffer ioctls or vendor EGL integrations need separate
+compatibility checks. No Weston, GPU userspace or application changes are made.
+
+The existing machine-specific Yocto append merges this fragment and tracks it
+for externalsrc builds. Rebuild from the BSP root:
+
+```sh
+source setup-environment build_imx6u_lcd
+bitbake -c deploy linux-imx-pcu
+bitbake pcu-ip-image
+```
+
+Use the kernel and DTB from the same build. Deploying the kernel alone does not
+refresh the disk image or factory bundle. For a first board check, inspect:
+
+```sh
+dmesg | grep -Ei 'drm|ipu|ldb|panel|backlight|pwm|regulator'
+ls /sys/class/drm
+cat /sys/class/drm/card*-LVDS-*/modes
+cat /sys/class/backlight/backlight-lvds/max_brightness
+cat /sys/class/backlight/backlight-lvds/brightness
+```
+
+Expect a 1920x1080 mode and a maximum brightness index of 10. After validating
+power sequencing and LVDS signals, enable a low brightness as root:
+
+```sh
+echo 2 > /sys/class/backlight/backlight-lvds/brightness
+```
+
+Use a DRM test pattern (for example `modetest` from libdrm's test package when
+installed) to check RGB channels, alternating odd/even columns and the visible
+720-line rectangle. Verify panel VDD rise time (0.4-30 ms), valid data at least
+40 ms after VDD reaches 90%, at least 640 ms before backlight, and at least
+1000 ms power-off before restart with an oscilloscope. Also test display
+blank/unblank, suspend/resume and warm reboot. Build checks are not hardware
+qualification and do not validate the physical PWM inversion or LVDS wiring.
+
 ## Remaining Hardware Questions
 
-- Supply the panel model, voltage, resolution/timings, LVDS single/dual-link,
-  JEIDA/VESA mapping and backlight polarity before enabling display power.
+- Confirm the populated panel is P294IVN02.0, its 12 V supply, LVDS_SEL strap,
+  odd/even link wiring, visible rectangle and inverted PWM against hardware.
 - Confirm calibrated DDR values and populated boot-configuration resistors.
 - Verify switch MDC physically at KEY_ROW1/GPIO4_IO09, despite the net label
   claiming GPIO4_IO31; resolve switch MDIO/GPIO1_IO08 versus CAN1_RX labeling.
@@ -392,5 +682,9 @@ bootloader and selects it via EXT_CSD. Boot straps must still select USDHC4.
 - The reused CPU symbol includes Quad-only SATA and VDD_CACHE_CAP labels.
   Compare the populated board against the DualLite NC-pin table before
   treating these connections as valid hardware.
-- RTC, I2C sensors, SPI NOR/FRAM/TPM/watchdog, audio, USB touch and LCD are
-  deferred until the serial/storage baseline is verified on the board.
+- LCD support requires the display checks above; audio remains disabled pending
+   codec details. USB touch is enabled only to the extent supported by USB HID.
+- UART2 remains disabled until its two alternative schematic pin routes are
+   resolved. IP175 management remains disabled pending the MDC/MDIO clarification.
+- Confirm RTC crystal load, installed ID straps, peripheral identities and
+   watchdog reset-gate wiring against the populated board before qualification.
